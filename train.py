@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from datasets.dataset import DenoiseDataset
-from models.baseline_cnn import SimpleCNN
+from models.residual_cnn import ResidualCNN 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -23,7 +23,17 @@ if torch.cuda.is_available():
 dataset = DenoiseDataset(TRAIN_NOISY, TRAIN_GT)
 loader = DataLoader(dataset, batch_size=2, shuffle=True)  # batch 2 safer for 512
 
-model = SimpleCNN().to(device)
+model = ResidualCNN().to(device)
+
+def count_parameters(model):
+    return sum(
+        p.numel()
+        for p in model.parameters()
+        if p.requires_grad
+    )
+
+print(f"Trainable Parameters: {count_parameters(model):,}")
+
 criterion = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
 
@@ -52,7 +62,7 @@ for epoch in range(epochs):
 
     if avg_loss < best_loss:
         best_loss = avg_loss
-        torch.save(model.state_dict(), "results/checkpoints/baseline_cnn.pth")
+        torch.save(model.state_dict(), "results/checkpoints/residual_cnn.pth")
         print("Best model saved.")
     
     loss_history.append(avg_loss)

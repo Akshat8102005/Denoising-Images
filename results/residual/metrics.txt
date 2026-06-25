@@ -1,0 +1,7 @@
+Baseline CNN Results
+====================
+
+Images Processed : 200
+Average PSNR     : 26.81 dB
+Average SSIM     : 0.7343
+Inference Time   : 0.016368 sec/image

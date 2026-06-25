@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import torch.nn.functional as F
 
-from models.baseline_cnn import SimpleCNN
+from models.residual_cnn import ResidualCNN
 from metrics.psnr import calculate_psnr
 from metrics.ssim import calculate_ssim
 
@@ -17,10 +17,10 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 TEST_NOISY = r"C:\\Users\\Aksha\\Downloads\\test_NoisyLR"
 TEST_GT = r"C:\\Users\\Aksha\\Downloads\\test_GT"
 
-MODEL_PATH = "results/checkpoints/baseline_cnn.pth"
+MODEL_PATH = "results/checkpoints/residual_cnn.pth"
 
-OUTPUT_DIR = "results/baseline/sample_outputs"
-METRICS_PATH = "results/baseline/metrics.txt"
+OUTPUT_DIR = "results/residual/sample_outputs"
+METRICS_PATH = "results/residual/metrics.txt"
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
@@ -31,7 +31,7 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 def load_model():
 
-    model = SimpleCNN().to(device)
+    model = ResidualCNN().to(device)
 
     model.load_state_dict(
         torch.load(MODEL_PATH, map_location=device)
